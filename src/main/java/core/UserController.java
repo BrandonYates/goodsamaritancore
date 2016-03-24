@@ -26,6 +26,6 @@ public class UserController {
 
     @RequestMapping("/user/findById")
     public User findById(@RequestParam(value="id")String id) {
-        return
+        return new User();
     }
 }
