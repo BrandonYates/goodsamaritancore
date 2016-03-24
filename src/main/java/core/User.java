@@ -17,17 +17,16 @@ public class User {
     private String firstName;
     private String lastName;
     private String emailAddress;
-
+    private String hashedPassword;
 
     public User () {}
 
-
-
-    public User (String id, String firstName, String lastName, String emailAddress) {
+    public User (String id, String firstName, String lastName, String emailAddress, String password) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
+        this.hashedPassword = password;
     }
 
     public String getId() { return id; }
@@ -47,4 +46,20 @@ public class User {
     public String getEmailAddress() { return emailAddress; }
 
     public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
+
+
+    public String getHashedPassword() { return hashedPassword; }
+
+    public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
+
+    public boolean equals(User candidate) {
+
+        boolean idMatch = (this.id.equals(candidate.id));
+        boolean fnMatch = (this.firstName.equals(candidate.firstName));
+        boolean lnMatch = (this.lastName.equals(candidate.lastName));
+        boolean emailMatch = (this.emailAddress.equals(candidate.emailAddress));
+        boolean passwordMatch = (this.hashedPassword.equals(candidate.hashedPassword));
+
+        return (idMatch && fnMatch && lnMatch && emailMatch && passwordMatch);
+    }
 }

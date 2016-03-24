@@ -9,6 +9,7 @@ package core;
     import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.bind.annotation.RestController;
     import java.util.UUID;
+//    import UserRepository;
 
 @RestController
 public class UserController {
@@ -18,8 +19,13 @@ public class UserController {
 
     @RequestMapping("/user")
     public User user(@RequestParam(value="firstName", defaultValue="Brandon")String id,
-                     String firstName, String lastName, String emailAddress) {
+                     String firstName, String lastName, String emailAddress, String password) {
         return new User(String.valueOf(UUID.randomUUID()),
-                String.format(template, firstName), lastName, emailAddress);
+                String.format(template, firstName), lastName, emailAddress, password);
+    }
+
+    @RequestMapping("/user/findById")
+    public User findById(@RequestParam(value="id")String id) {
+        return
     }
 }
