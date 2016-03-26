@@ -22,7 +22,7 @@ public class StringManipulation {
 
     public void setOriginal(String password) {
         this.original = password;
-        System.out.println("SALT: " + salt);
+//        System.out.println("SALT: " + salt);
 //        this.salted = password.concat(salt);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         this.hashed = passwordEncoder.encode(this.original);
