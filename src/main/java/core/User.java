@@ -1,14 +1,17 @@
 package core;
 
-/**
- * Created by brandonyates on 3/21/16.
- */
-
-//import static org.springframework.util.Assert.notNull;
 
 /**
- *  The User service defines the generic user object used to hold data representing a User
- *  of the Good Samaritan Application.
+ *
+ *  Module Name: User Service
+ *
+ *  Description: The User service defines the generic user object used to hold data representing a User
+ *  of the Good Samaritan Application. Chief uses are authentication and data association between Users and Deeds.
+ *
+ *  Date: 3/21/16
+ *
+ *
+ *  Author: Brandon Yates
  */
 public class User {
 
@@ -52,6 +55,11 @@ public class User {
 
     public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
 
+    public String toString() {
+        return "Id: " + this.id + "\nFirstName: " + this.firstName + "\nLastName: "
+                + this.lastName + "\nEmailAddress: " + this.emailAddress + "\nHashedPassword: " + this.hashedPassword;
+    }
+
     public boolean equals(User candidate) {
 
         boolean idMatch = (this.id.equals(candidate.id));
@@ -61,5 +69,13 @@ public class User {
         boolean passwordMatch = (this.hashedPassword.equals(candidate.hashedPassword));
 
         return (idMatch && fnMatch && lnMatch && emailMatch && passwordMatch);
+    }
+
+    public void copy(User assignee) {
+        this.id = assignee.id;
+        this.firstName = assignee.firstName;
+        this.lastName = assignee.lastName;
+        this.emailAddress = assignee.emailAddress;
+        this.hashedPassword = assignee.hashedPassword;
     }
 }

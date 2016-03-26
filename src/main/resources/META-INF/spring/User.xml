@@ -6,7 +6,7 @@
 
        <context:property-placeholder location="classpath*:*.properties" />
 
-       <bean id="UserRespository" class="core.UserRepository" >
-       </bean>
+       <!--<bean id="UserRespository" class="core.UserRepository" >-->
+       <!--</bean>-->
 
 </beans>

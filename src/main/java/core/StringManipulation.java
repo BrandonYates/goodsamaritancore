@@ -16,14 +16,16 @@ public class StringManipulation {
     private String hashed;
 
 
-    @Value("${com.security.salt}")private String salt;
+    @Value("${com.security.salt}")
+    private String salt;
 
 
     public void setOriginal(String password) {
         this.original = password;
-        this.salted = password.concat(salt);
+        System.out.println("SALT: " + salt);
+//        this.salted = password.concat(salt);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        this.hashed = passwordEncoder.encode(this.salted);
+        this.hashed = passwordEncoder.encode(this.original);
 
     }
 
