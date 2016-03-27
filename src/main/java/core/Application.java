@@ -4,14 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.lang.System;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
-//    @Autowired
-//    private UserRepository repository;
+
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -19,6 +20,8 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/test-context.xml");
+
         System.out.println("RUN");
 
         /**

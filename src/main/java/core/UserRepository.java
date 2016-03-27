@@ -7,7 +7,9 @@ package core;
 import java.util.Collection;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-
+import org.springframework.stereotype.Repository;
+//
+@Repository
 public interface UserRepository extends MongoRepository<User, String> {
     User findById (String id);
     Collection<User> findByFirstName (String firstName);

@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:beans="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-2.5.xsd
+       http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-       <context:property-placeholder location="classpath*:*.properties" />
 
-       <!--<bean id="UserRespository" class="core.UserRepository" >-->
-       <!--</bean>-->
+       <context:spring-configured/>
+       <context:property-placeholder location="classpath:META-INF/*.properties"/>
+       <context:annotation-config />
+
+       <mongo:mongo id="user" host="localhost" port="${user.mongo.db.port}">
+
+       </mongo:mongo>
+
+       <!-- MongoDB host -->
+       <mongo:mongo host="${mongo.host.name}" port="${mongo.host.port}" />
+
+       <!-- Template for performing MongoDB operations -->
+       <bean id="userTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+              <constructor-arg ref="user" />
+              <constructor-arg value="${user.mongo.db.name}" />
+       </bean>
+
+       <!--<bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>-->
+
+       <bean id="encoder"
+                   class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+              <constructor-arg name="strength" value="11" />
+       </bean>
+       <!--<mongo:repositories base-package="core"/>-->
+
+       <!--<context:component-scan base-package="core" />-->
 
 </beans>

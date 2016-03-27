@@ -2,6 +2,10 @@ package core;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
 
 //import core.User;
 
@@ -14,19 +18,32 @@ import java.util.*;
 
 public class UserServiceTest {
 
-    @Resource
-    UserController userController;
+//    @Autowired
+//    UserController userController;
+
+//    public void setUserController(UserController userController) {
+//        this.userController = userController;
+//    }
+
+    @Autowired
+    private StringManipulation encoder;
 
     @Test
     public void testUserModel () {
 
-        StringManipulation generator = new StringManipulation();
+        System.out.println("################ PART 1 ################");
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/test-context.xml");
 
-        String pw = "password";
-        generator.setOriginal(pw);
+        UserController userController = context.getBean(UserController.class);
+
+        //create a few test users
+
         User testUser = new User(String.valueOf(UUID.randomUUID()), "Brandon", "Yates",
-                "brandonyates66@gmail.com", generator.getPassword());
+                "brandonyates66@gmail.com", "password");
 
+        System.out.println("################ PART 2 ################");
+
+        //test some basic operations
         User shouldMatch = new User();
 
         shouldMatch.copy(testUser);
@@ -37,13 +54,38 @@ public class UserServiceTest {
 
         Assert.assertTrue(testUser.equals(shouldMatch));
 
-        String pw2 = "password2";
-        generator.setOriginal(pw2);
         User user2 = new User(String.valueOf(UUID.randomUUID()), "Samuel", "Rodriguez",
-                "samtheman@gmail.com", generator.getPassword());
+                "samtheman@gmail.com", "password2");
+
+        userController.createUser(user2);
 
         Assert.assertFalse(testUser.equals(user2));
 
+        System.out.println("################ PART 3 ################");
+        //test REST operations
+        Assert.assertNotNull(userController);
 
+        userController.createUser(testUser);
+
+        User found = userController.findById(testUser.getId());
+
+        Assert.assertNotNull(found);
+
+        User authenticated = userController.authenticateUser("brandonyates66@gmail.com", "password");
+//
+        Assert.assertNotNull(authenticated);
+
+        userController.update(testUser.getId(), testUser);
+
+        testUser = userController.findById(testUser.getId());
+
+        System.out.println(testUser.toString());
+
+        userController.delete(user2.getId());
+        userController.delete(testUser.getId());
+        userController.delete(authenticated.getId());
+
+
+        System.out.println("################ PART 4 (finished) ################");
     }
 }
