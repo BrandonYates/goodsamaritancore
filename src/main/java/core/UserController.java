@@ -15,7 +15,6 @@ package core;
 
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.security.crypto.password.PasswordEncoder;
-    import org.springframework.security.crypto.password.StandardPasswordEncoder;
     import org.springframework.web.bind.annotation.RequestMethod;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestParam;
@@ -56,10 +55,10 @@ public class UserController {
         String before = user.getHashedPassword();
         String hashed = encoder.encode(before);
 
-        System.out.println("preHash: " + before);
+        System.out.println("preHash: " + user.toString());
         user.setHashedPassword(encoder.encode(hashed));
 
-        System.out.println("postHash: " + hashed);
+        System.out.println("postHash: " + user.toString());
         userRepository.save(user);
     }
 
@@ -109,7 +108,7 @@ public class UserController {
             System.out.println("hashed: " + hashed);
             System.out.println("****************");
 
-            userRepository.delete(user);
+//            userRepository.delete(user);
             if(user.getHashedPassword().equals(hashed)) {
                 return user;
             }

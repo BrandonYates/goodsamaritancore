@@ -1,11 +1,5 @@
 package core;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.security.crypto.password.StandardPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -33,7 +27,6 @@ public class User {
     private String lastName;
     private String emailAddress;
     private String hashedPassword;
-
 
     public User () {}
 
