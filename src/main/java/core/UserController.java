@@ -14,6 +14,7 @@ package core;
  */
 
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.security.crypto.password.StandardPasswordEncoder;
     import org.springframework.web.bind.annotation.RequestMethod;
     import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     //standard CRUD operations
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
@@ -41,16 +45,22 @@ public class UserController {
                            @RequestParam("emailAddress")String emailAddress,
                            String password) {
 
-        User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, password);
+        String hashed = encoder.encode(password);
+        User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, hashed);
         userRepository.save(newUser);
     }
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public void createUser(User user) {
 
-        User newUser = new User();
-        newUser.copy(user);
-        userRepository.save(newUser);
+        String before = user.getHashedPassword();
+        String hashed = encoder.encode(before);
+
+        System.out.println("preHash: " + before);
+        user.setHashedPassword(encoder.encode(hashed));
+
+        System.out.println("postHash: " + hashed);
+        userRepository.save(user);
     }
 
     @RequestMapping(value = "/findUserById", method = RequestMethod.GET)
@@ -87,6 +97,7 @@ public class UserController {
     public User authenticateUser(@RequestParam("emailAddress")String emailAddress,
                                     String password) {
 
+        String hashed = encoder.encode(password);
         Collection<User> users = userRepository.findByEmailAddress(emailAddress);
 
         for(Iterator<User> iter = users.iterator(); iter.hasNext();) {
@@ -95,10 +106,11 @@ public class UserController {
             System.out.println("****************");
             System.out.println(user.toString());
             System.out.println("****************");
-            System.out.println(password);
+            System.out.println("hashed: " + hashed);
             System.out.println("****************");
 
-            if(user.getHashedPassword().equals(password)) {
+            userRepository.delete(user);
+            if(user.getHashedPassword().equals(hashed)) {
                 return user;
             }
         }

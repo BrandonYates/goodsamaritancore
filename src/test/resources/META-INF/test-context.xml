@@ -11,7 +11,10 @@
        <context:annotation-config />
 
        <bean id="userController" class="core.UserController"/>
-       <bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+       <bean id="encoder"
+             class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+              <constructor-arg name="strength" value="11" />
+       </bean>
 
        <context:component-scan base-package="core" />
 </beans>

@@ -65,17 +65,7 @@ public class UserServiceTest {
         //test REST operations
         Assert.assertNotNull(userController);
 
-        System.out.println("****************************");
-        System.out.println("****************************");
-        System.out.println("****************************");
-        System.out.println("****************************");
-        System.out.println("****************************");
         userController.createUser(testUser);
-        System.out.println("****************************");
-        System.out.println("****************************");
-        System.out.println("****************************");
-        System.out.println("****************************");
-        System.out.println("****************************");
 
         User found = userController.findById(testUser.getId());
 
@@ -93,6 +83,8 @@ public class UserServiceTest {
 
         userController.delete(user2.getId());
         userController.delete(testUser.getId());
+        userController.delete(authenticated.getId());
+
 
         System.out.println("################ PART 4 (finished) ################");
     }

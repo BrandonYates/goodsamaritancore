@@ -2,7 +2,12 @@ package core;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.annotation.Resource;
 
@@ -19,7 +24,7 @@ import javax.annotation.Resource;
  *  Author: Brandon Yates
  */
 
-
+@Service
 public class User {
 
 //    @NotNull
@@ -29,8 +34,6 @@ public class User {
     private String emailAddress;
     private String hashedPassword;
 
-    @Autowired
-    private StandardPasswordEncoder encoder;
 
     public User () {}
 
@@ -40,7 +43,6 @@ public class User {
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.hashedPassword = password;
-//        this.hashedPassword = encoder.encode(password);
     }
 
     public String getId() { return id; }
