@@ -14,6 +14,7 @@ package core;
  */
 
     import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.security.crypto.password.StandardPasswordEncoder;
     import org.springframework.web.bind.annotation.RequestMethod;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestParam;
@@ -39,15 +40,14 @@ public class UserController {
                            @RequestParam("lastName")String lastName,
                            @RequestParam("emailAddress")String emailAddress,
                            String password) {
-        StringManipulation manipulator = new StringManipulation();
-        manipulator.setOriginal(password);
-        String readyForStorage = manipulator.getPassword();
-        User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, readyForStorage);
+
+        User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, password);
         userRepository.save(newUser);
     }
 
     @RequestMapping(value = "/createUser", method = RequestMethod.POST)
     public void createUser(User user) {
+
         User newUser = new User();
         newUser.copy(user);
         userRepository.save(newUser);
@@ -64,11 +64,13 @@ public class UserController {
 
         User oldUser = userRepository.findById(id);
 
-        oldUser.copy(user);
+        if(oldUser != null) {
+            oldUser.copy(user);
+            userRepository.save(oldUser);
+            return oldUser;
+        }
 
-        userRepository.save(oldUser);
-
-        return oldUser;
+        return null;
     }
 
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
@@ -80,7 +82,6 @@ public class UserController {
         return condemned;
     }
 
-
     //this method is likely to evolve significantly as a more robust authentication method is employed from android
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public User authenticateUser(@RequestParam("emailAddress")String emailAddress,
@@ -88,22 +89,16 @@ public class UserController {
 
         Collection<User> users = userRepository.findByEmailAddress(emailAddress);
 
-        StringManipulation manipulator = new StringManipulation();
-        System.out.println("password: " + password);
-        manipulator.setOriginal(password);
-
-
         for(Iterator<User> iter = users.iterator(); iter.hasNext();) {
             User user = iter.next();
 
             System.out.println("****************");
             System.out.println(user.toString());
             System.out.println("****************");
-            String hashed = manipulator.getPassword();
-            System.out.println(hashed);
+            System.out.println(password);
             System.out.println("****************");
 
-            if(user.getHashedPassword().equals(hashed)) {
+            if(user.getHashedPassword().equals(password)) {
                 return user;
             }
         }

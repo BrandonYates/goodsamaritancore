@@ -12,6 +12,7 @@
 
        <context:spring-configured/>
        <context:property-placeholder location="classpath:META-INF/*.properties"/>
+       <context:annotation-config />
 
        <mongo:mongo id="user" host="localhost" port="${user.mongo.db.port}">
 
@@ -26,9 +27,10 @@
               <constructor-arg value="${user.mongo.db.name}" />
        </bean>
 
+       <bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>
+
        <!--<mongo:repositories base-package="core"/>-->
 
-       <context:annotation-config />
        <context:component-scan base-package="core" />
 
 </beans>

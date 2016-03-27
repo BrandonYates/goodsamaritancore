@@ -20,6 +20,8 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/test-context.xml");
+
         System.out.println("RUN");
 
         /**

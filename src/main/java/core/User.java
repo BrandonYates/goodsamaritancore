@@ -1,6 +1,11 @@
 package core;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
+
+import javax.annotation.Resource;
+
 /**
  *
  *  Module Name: User Service
@@ -13,6 +18,8 @@ package core;
  *
  *  Author: Brandon Yates
  */
+
+
 public class User {
 
 //    @NotNull
@@ -22,6 +29,9 @@ public class User {
     private String emailAddress;
     private String hashedPassword;
 
+    @Autowired
+    private StandardPasswordEncoder encoder;
+
     public User () {}
 
     public User (String id, String firstName, String lastName, String emailAddress, String password) {
@@ -30,6 +40,7 @@ public class User {
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.hashedPassword = password;
+//        this.hashedPassword = encoder.encode(password);
     }
 
     public String getId() { return id; }

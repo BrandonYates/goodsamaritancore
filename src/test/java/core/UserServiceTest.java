@@ -16,7 +16,6 @@ import java.util.*;
  * Created by brandonyates on 3/26/16.
  */
 
-//@ContextConfiguration(locations = {"classpath:META-INF/test-context.xml"})
 public class UserServiceTest {
 
 //    @Autowired
@@ -26,17 +25,23 @@ public class UserServiceTest {
 //        this.userController = userController;
 //    }
 
+    @Autowired
+    private StringManipulation encoder;
+
     @Test
     public void testUserModel () {
 
+        System.out.println("################ PART 1 ################");
         AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/test-context.xml");
 
         UserController userController = context.getBean(UserController.class);
-                //create a few test users
-        StringManipulation generator = new StringManipulation();
+
+        //create a few test users
 
         User testUser = new User(String.valueOf(UUID.randomUUID()), "Brandon", "Yates",
                 "brandonyates66@gmail.com", "password");
+
+        System.out.println("################ PART 2 ################");
 
         //test some basic operations
         User shouldMatch = new User();
@@ -49,16 +54,29 @@ public class UserServiceTest {
 
         Assert.assertTrue(testUser.equals(shouldMatch));
 
-        String pw2 = "password2";
-        generator.setOriginal(pw2);
         User user2 = new User(String.valueOf(UUID.randomUUID()), "Samuel", "Rodriguez",
-                "samtheman@gmail.com", generator.getPassword());
+                "samtheman@gmail.com", "password2");
+
+        userController.createUser(user2);
 
         Assert.assertFalse(testUser.equals(user2));
 
+        System.out.println("################ PART 3 ################");
         //test REST operations
         Assert.assertNotNull(userController);
+
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("****************************");
         userController.createUser(testUser);
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("****************************");
+        System.out.println("****************************");
+
         User found = userController.findById(testUser.getId());
 
         Assert.assertNotNull(found);
@@ -73,5 +91,9 @@ public class UserServiceTest {
 
         System.out.println(testUser.toString());
 
+        userController.delete(user2.getId());
+        userController.delete(testUser.getId());
+
+        System.out.println("################ PART 4 (finished) ################");
     }
 }
