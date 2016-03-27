@@ -95,6 +95,6 @@ public class Deed {
       this.reqUserId = d.getRequestingUserId();
       this.date = Date.valueOf(d.getDate());
       this.claimedUserIds.addAll(d.getClaimedUserIds());
-      this.location.copy(d.getLocation());
+//      this.location.copy(d.getLocation());
   }
 }

@@ -96,7 +96,7 @@ public class UserController {
     public User authenticateUser(@RequestParam("emailAddress")String emailAddress,
                                     String password) {
 
-        String hashed = encoder.encode(password);
+//        String hashed = encoder.encode(password);
         Collection<User> users = userRepository.findByEmailAddress(emailAddress);
 
         for(Iterator<User> iter = users.iterator(); iter.hasNext();) {
@@ -105,13 +105,14 @@ public class UserController {
             System.out.println("****************");
             System.out.println(user.toString());
             System.out.println("****************");
-            System.out.println("hashed: " + hashed);
+            System.out.println("matches " + encoder.matches("password", user.getHashedPassword()));
             System.out.println("****************");
 
 //            userRepository.delete(user);
-            if(user.getHashedPassword().equals(hashed)) {
+            if(encoder.matches(password, user.getHashedPassword())) {
                 return user;
             }
+
         }
         return null;
     }

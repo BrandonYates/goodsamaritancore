@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 
 /**
  *
@@ -27,6 +28,7 @@ public class User {
     private String lastName;
     private String emailAddress;
     private String hashedPassword;
+    private Collection<Deed> deeds;
 
     public User () {}
 
@@ -36,6 +38,7 @@ public class User {
         this.lastName = lastName;
         this.emailAddress = emailAddress;
         this.hashedPassword = password;
+        this.deeds = null;
     }
 
     public String getId() { return id; }
@@ -56,10 +59,13 @@ public class User {
 
     public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
 
-
     public String getHashedPassword() { return hashedPassword; }
 
     public void setHashedPassword(String hashedPassword) { this.hashedPassword = hashedPassword; }
+
+    public Collection<Deed> getDeeds() { return deeds; }
+
+    public void setDeeds(Collection<Deed> deeds) { this.deeds = deeds;}
 
     public String toString() {
         return "Id: " + this.id + "\nFirstName: " + this.firstName + "\nLastName: "
