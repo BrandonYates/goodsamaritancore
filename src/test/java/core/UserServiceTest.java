@@ -72,7 +72,7 @@ public class UserServiceTest {
         Assert.assertNotNull(found);
 
         User authenticated = userController.authenticateUser("samtheman@gmail.com", "password2");
-//
+
         Assert.assertNotNull(authenticated);
 
         userController.update(testUser.getId(), testUser);
@@ -83,7 +83,6 @@ public class UserServiceTest {
 
         userController.delete(user2.getId());
         userController.delete(testUser.getId());
-//        userController.delete(authenticated.getId());
 
         System.out.println("################ PART 4 (finished) ################");
     }
