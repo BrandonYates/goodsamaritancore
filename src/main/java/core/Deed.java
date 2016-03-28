@@ -21,12 +21,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.sql.Date;
+import org.springframework.data.annotation.Id;
 
 public class Deed {
+  @Id
   private String id;
+
   private String description;
   private Date date;
-  private String  reqUserId;
+
+  @RequestingUserId
+  private String  requestingUserId;
   private Set<String> claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
   private Location location = new Location();
 
@@ -34,16 +39,16 @@ public class Deed {
     this.id = id;
     this.description = desc;
     this.date = new Date(t);
-    this.reqUserId = uid;
-    this.location = l;
+    this.requestingUserId = uid;
+    this.location.copy(l);
   };
 
   public Deed(String id, String desc, String d, String uid, Location l) {
     this.id = id;
     this.description = desc;
     this.date = Date.valueOf(d);
-    this.reqUserId = uid;
-    this.location = l;
+    this.requestingUserId = uid;
+    this.location.copy(l);
     this.claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
   };
 
@@ -57,8 +62,8 @@ public class Deed {
   public void setDate(long t) { this.date = new Date(t); };
   public void setDate(String d) { this.date = Date.valueOf(d); };
 
-  public String getRequestingUserId() { return this.reqUserId; };
-  public void setRequestingUserId(String uid) { this.reqUserId = uid; };
+  public String getRequestingUserId() { return this.requestingUserId; };
+  public void setRequestingUserId(String uid) { this.requestingUserId = uid; };
 
   public Set<String> getClaimedUserIds() { return this.claimedUserIds; };
   public void addClaimedUserId(String uid) { this.claimedUserIds.add(uid); };
@@ -71,7 +76,7 @@ public class Deed {
     StringBuilder s = new StringBuilder();
     s.append(String.format("ID: %s\n", this.id));
     s.append(String.format("Description: %s\n", this.description));
-    s.append(String.format("Requesting User ID: %s\n", this.reqUserId));
+    s.append(String.format("Requesting User ID: %s\n", this.requestingUserId));
     s.append(String.format("Date: %s\n", this.date.toString()));
     s.append(String.format("Claimed User IDs: %s\n", this.claimedUserIds.toString()));
     s.append(String.format("Location: %s\n", this.location.toString()));
@@ -81,7 +86,7 @@ public class Deed {
   public boolean equals(Deed d) {
     if(!this.id.equals(d.getId())) { return false; };
     if(!this.description.equals(d.getDescription()))  { return false; };
-    if(!this.reqUserId.equals(d.getRequestingUserId()))  { return false; };
+    if(!this.requestingUserId.equals(d.getRequestingUserId()))  { return false; };
     if(!this.date.equals(d.getDate()))  { return false; };
     if(!this.claimedUserIds.equals(d.getClaimedUserIds())) { return false; };
     if(!this.location.equals(d.getLocation()))  { return false; };
@@ -92,9 +97,9 @@ public class Deed {
   public void copy(Deed d) {
       this.id = d.getId();
       this.description = d.getDescription();
-      this.reqUserId = d.getRequestingUserId();
+      this.requestingUserId = d.getRequestingUserId();
       this.date = Date.valueOf(d.getDate());
       this.claimedUserIds.addAll(d.getClaimedUserIds());
-//      this.location.copy(d.getLocation());
+      this.location.copy(d.getLocation());
   }
 }

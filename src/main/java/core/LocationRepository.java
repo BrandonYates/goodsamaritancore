@@ -1,7 +1,17 @@
 package core;
 
 /**
- * Created by sam on 3/26/16.
+ *  LocationRepository.java
+ *
+ * Created by Samuel Rodriguez on 3/26/16.
+ *
+ *  Used to let the location interact with the Mongo
  */
-public interface LocationRepository {
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+public interface LocationRepository extends MongoRepository<Location, String> {
+
+    Location findById (String id); // find a location by mongo id
+
 }
