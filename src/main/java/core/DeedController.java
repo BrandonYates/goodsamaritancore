@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import core.StringManipulation;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.UUID;
 
 @RestController
@@ -36,7 +36,7 @@ public class DeedController {
                          @RequestParam("uid")String uid,
                          @RequestParam("latitude")Double lat,
                          @RequestParam("longitude")Double lon) {
-    Location l = new Location(lat, lon);
+    Location l = new Location(String.valueOf(UUID.randomUUID()), lat, lon);
     locRepository.save(l);
     Deed newDeed = new Deed(String.valueOf(UUID.randomUUID()), desc, date, uid, l);
     deedRepository.save(newDeed);
@@ -56,7 +56,8 @@ public class DeedController {
   }
 
   @RequestMapping(value = "/findDeedByRequestingUserId", method = RequestMethod.GET)
-  public Deed findById(@RequestParam("uid")String requestingUserId) {
+  public Collection<Deed> findByRequestingUserId(
+    @RequestParam("uid")String requestingUserId) {
 
         return deedRepository.findByRequestingUserId(requestingUserId);
   }
