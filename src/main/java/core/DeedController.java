@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import core.StringManipulation;
 
 import javax.annotation.Resource;
 import java.util.Collection;
@@ -33,10 +32,11 @@ public class DeedController {
 
   @RequestMapping(value = "/createDeed", method = RequestMethod.POST)
   public String createDeed(@RequestParam("desc")String desc,
-                         @RequestParam("date")long date,
-                         @RequestParam("uid")String uid,
-                         @RequestParam("latitude")Double lat,
-                         @RequestParam("longitude")Double lon) {
+                           @RequestParam("date")long date,
+                           @RequestParam("uid")String uid,
+                           @RequestParam("latitude")Double lat,
+                           @RequestParam("latitude")Double lon) {
+
     Location l = new Location(UUID.randomUUID().toString(), lat, lon);
     locRepository.save(l);
     Deed newDeed = new Deed(String.valueOf(UUID.randomUUID()), desc, date, uid, l);

@@ -1,6 +1,4 @@
 package core;
-
-
 /**
  *
  *  Module Name: Deed Service
@@ -17,23 +15,24 @@ package core;
 import core.Location;
 
 import java.lang.StringBuilder;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import java.sql.Date;
-import org.springframework.data.annotation.Id;
 
 public class Deed {
-  @Id
   private String id;
-
   private String description;
   private Date date;
-
-  @RequestingUserId
   private String  requestingUserId;
   private Set<String> claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
   private Location location = new Location();
+  private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+  public Deed() {};
 
   public Deed(String id, String desc, long t, String uid, Location l) {
     this.id = id;
@@ -46,11 +45,19 @@ public class Deed {
   public Deed(String id, String desc, String d, String uid, Location l) {
     this.id = id;
     this.description = desc;
-    this.date = Date.valueOf(d);
+    try {
+      this.date = df.parse(d);
+    } catch(ParseException ex) {
+      System.out.println(ex.getMessage());
+    }
     this.requestingUserId = uid;
     this.location.copy(l);
     this.claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
   };
+
+  public Deed(Deed d) {
+    this.copy(d);
+  }
 
   public String getId() { return this.id; };
   public void setId(String id) { this.id = id; };
@@ -59,8 +66,14 @@ public class Deed {
   public void setDescription(String desc) { this.description = desc; };
 
   public String getDate() { return this.date.toString(); };
-  public void setDate(long t) { this.date = new Date(t); };
-  public void setDate(String d) { this.date = Date.valueOf(d); };
+  public void setDate(long t) { this.date.setTime(t); };
+  public void setDate(String d) {
+    try {
+      this.date = df.parse(d);
+    } catch(ParseException ex) {
+      System.out.println(ex.getMessage());
+    }
+  };
 
   public String getRequestingUserId() { return this.requestingUserId; };
   public void setRequestingUserId(String uid) { this.requestingUserId = uid; };
@@ -70,7 +83,7 @@ public class Deed {
   public void deleteClaimedUserId(String uid) { this.claimedUserIds.remove(uid); };
 
   public Location getLocation() { return this.location; };
-  public void setLocation(Location loc) { this.location = loc; };
+  public void setLocation(Location loc) { this.location.copy(loc); };
 
   public String toString() {
     StringBuilder s = new StringBuilder();
@@ -84,22 +97,24 @@ public class Deed {
   }
 
   public boolean equals(Deed d) {
-    if(!this.id.equals(d.getId())) { return false; };
-    if(!this.description.equals(d.getDescription()))  { return false; };
-    if(!this.requestingUserId.equals(d.getRequestingUserId()))  { return false; };
-    if(!this.date.equals(d.getDate()))  { return false; };
-    if(!this.claimedUserIds.equals(d.getClaimedUserIds())) { return false; };
-    if(!this.location.equals(d.getLocation()))  { return false; };
-
-    return true;
+    if(this.id.equals(d.id) &&
+       this.description.equals(d.description) &&
+       this.requestingUserId.equals(d.requestingUserId) &&
+       this.date.equals(d.date) &&
+       this.claimedUserIds.equals(d.claimedUserIds) &&
+       this.location.equals(d.location)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public void copy(Deed d) {
-      this.id = d.getId();
-      this.description = d.getDescription();
-      this.requestingUserId = d.getRequestingUserId();
-      this.date = Date.valueOf(d.getDate());
-      this.claimedUserIds.addAll(d.getClaimedUserIds());
-      this.location.copy(d.getLocation());
+      this.id = d.id;
+      this.description = d.description;
+      this.requestingUserId = d.requestingUserId;
+      this.date = d.date;
+      this.claimedUserIds = d.claimedUserIds;
+      this.location = d.location;
   }
 }
