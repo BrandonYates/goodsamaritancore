@@ -28,6 +28,10 @@
               <constructor-arg value="${user.mongo.db.name}" />
        </bean>
 
+       <!--<bean id="locationTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+             <!--<constructor-arg ref="deed" />-->
+       <!--</bean>-->
+
        <!--<bean id="encoder" class="org.springframework.security.crypto.password.StandardPasswordEncoder"/>-->
 
        <bean id="encoder"
