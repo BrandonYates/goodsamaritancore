@@ -20,7 +20,6 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        AbstractApplicationContext context = new ClassPathXmlApplicationContext("classpath:META-INF/test-context.xml");
 
         System.out.println("RUN");
 
@@ -29,7 +28,7 @@ public class Application implements CommandLineRunner {
          * It has no "active" functionality.  The print lets us know that the application is currently running. Unless more
          * start up tasks become necessary this should be empty
          *
-         * tl;dr This method is only for essential intialization tasks
+         * tl;dr This method is only for essential initialization tasks
          */
     }
 

@@ -11,6 +11,8 @@
        <context:annotation-config />
 
        <bean id="userController" class="core.UserController"/>
+       <bean id="deedController" class="core.DeedController"/>
+       <bean id="locationController" class="core.LocationController"/>
        <bean id="encoder"
              class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
               <constructor-arg name="strength" value="11" />

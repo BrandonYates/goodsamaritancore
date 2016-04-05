@@ -30,7 +30,7 @@ public class DeedController {
   @Autowired
   private LocationRepository locRepository;
 
-  @RequestMapping(value = "/createDeed", method = RequestMethod.POST)
+  @RequestMapping(value = "/createDeed/params", method = RequestMethod.POST)
   public String createDeed(@RequestParam("desc")String desc,
                            @RequestParam("date")long date,
                            @RequestParam("uid")String uid,
@@ -44,7 +44,7 @@ public class DeedController {
     return newDeed.getId();
   }
 
-  @RequestMapping(value = "/createDeed", method = RequestMethod.POST)
+  @RequestMapping(value = "/createDeed/obj", method = RequestMethod.POST)
   public String createDeed(Deed deed) {
     deedRepository.save(deed);
     return deed.getId();

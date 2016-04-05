@@ -14,7 +14,8 @@ package core;
  */
 
     import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.security.crypto.password.PasswordEncoder;
+//    import org.springframework.security.crypto.password.PasswordEncoder;
+    import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.web.bind.annotation.RequestMethod;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestParam;
@@ -33,12 +34,18 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder encoder;
+    @Autowired(required = false)
+    private BCryptPasswordEncoder encoder;
 
     //standard CRUD operations
 
-    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
+    @RequestMapping(value="/hello", method = RequestMethod.GET)
+    public String printHello () {
+        String hello = "HELLO";
+        return hello;
+    }
+
+    @RequestMapping(value = "/createUser/params", method = RequestMethod.POST)
     public void createUser(@RequestParam("firstName")String firstName,
                            @RequestParam("lastName")String lastName,
                            @RequestParam("emailAddress")String emailAddress,
@@ -49,7 +56,7 @@ public class UserController {
         userRepository.save(newUser);
     }
 
-    @RequestMapping(value = "/createUser", method = RequestMethod.POST)
+    @RequestMapping(value = "/createUser/obj", method = RequestMethod.POST)
     public void createUser(User user) {
 
         String before = user.getHashedPassword();
