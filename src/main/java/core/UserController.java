@@ -35,7 +35,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @Autowired(required = false)
-    private BCryptPasswordEncoder encoder;
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     //standard CRUD operations
 
@@ -73,6 +73,11 @@ public class UserController {
     public User findById(@RequestParam("id")String id) {
 
         return userRepository.findById(id);
+    }
+
+    @RequestMapping(value = "/findUserByEmail", method = RequestMethod.GET)
+    public Collection<User> findByEmail(@RequestParam("emailAddress") String emailAddress) {
+        return userRepository.findByEmailAddress(emailAddress);
     }
 
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
