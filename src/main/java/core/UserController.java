@@ -59,6 +59,7 @@ public class UserController {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
+    @RequestMapping(value = "/createUser/params",  method = RequestMethod.POST)
     public Response createUser(@RequestParam("firstName")String firstName,
                                @RequestParam("lastName")String lastName,
                            @RequestParam("emailAddress")String emailAddress,
@@ -121,13 +122,11 @@ public class UserController {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public Response authenticateUser(@RequestParam("emailAddress")String emailAddress,
                                     String password) {
 
         Collection<User> users = userRepository.findByEmailAddress(emailAddress);
-
-
 
         System.out.println("result: " + encoder.matches(password, encoder.encode(password)));
 
