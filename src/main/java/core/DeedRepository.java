@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 //
 @Repository
 public interface DeedRepository extends MongoRepository<Deed, String> {
+
     Deed findById (String id);
     Collection<Deed> findByRequestingUserId (String requestingUserId);
 }

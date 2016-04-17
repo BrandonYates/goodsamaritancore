@@ -31,6 +31,7 @@ public class Deed {
   private Set<String> claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
   private Location location = new Location();
   private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+  private boolean active;
 
   public Deed() {};
 
@@ -84,6 +85,10 @@ public class Deed {
 
   public Location getLocation() { return this.location; };
   public void setLocation(Location loc) { this.location.copy(loc); };
+
+  public boolean isActive() { return active; }
+
+  public void setActive(boolean active) { this.active = active; }
 
   public String toString() {
     StringBuilder s = new StringBuilder();

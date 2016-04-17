@@ -67,7 +67,8 @@ public class UserController {
         User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, password);
         userRepository.save(newUser);
 
-        return Response.ok(newUser).build();
+        Response.ResponseBuilder response = Response.ok(newUser);
+        return response.build();
     }
 
     @Path("/createUser/")

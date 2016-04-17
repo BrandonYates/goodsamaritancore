@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -63,7 +64,7 @@ public class DeedController {
   }
 
   @RequestMapping(value = "/updateDeed", method = RequestMethod.POST)
-    public Deed update(@RequestParam("id")String id, Deed deed) {
+  public Deed update(@RequestParam("id")String id, Deed deed) {
 
         Deed oldDeed = deedRepository.findById(id);
 
@@ -84,4 +85,19 @@ public class DeedController {
 
         return d;
     }
+
+    @RequestMapping(value = "/getactivedeeds", method = RequestMethod.GET)
+    public Collection<Deed> getActiveDeeds () {
+        Collection<Deed> all = deedRepository.findAll();
+
+        Collection<Deed> active = new ArrayList<Deed>();
+
+        for(Deed deed: all) {
+            if(deed.isActive()) {
+                active.add(deed);
+            }
+        }
+        return active;
+    }
+
 }
