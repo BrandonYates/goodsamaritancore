@@ -1,5 +1,6 @@
 package core;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -37,7 +38,8 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.hashedPassword = password;
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.hashedPassword = encoder.encode(password);
         this.deeds = null;
     }
 
@@ -58,6 +60,11 @@ public class User {
     public String getEmailAddress() { return emailAddress; }
 
     public void setEmailAddress(String emailAddress) { this.emailAddress = emailAddress; }
+
+    public void setPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        this.hashedPassword = encoder.encode(password);
+    }
 
     public String getHashedPassword() { return hashedPassword; }
 

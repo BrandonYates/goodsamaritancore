@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 //import core.User;
 
 import javax.annotation.Resource;
+import javax.ws.rs.core.Response;
 import java.util.*;
 
 /**
@@ -43,6 +44,8 @@ public class UserServiceTest {
 
         System.out.println("################ PART 2 ################");
 
+        Response response1 = userController.createUser("Hannah", "Stewart", "hannahstewart@example.com", "password");
+
         //test some basic operations
         User shouldMatch = new User();
 
@@ -71,9 +74,14 @@ public class UserServiceTest {
 
         Assert.assertNotNull(found);
 
-        User authenticated = userController.authenticateUser("samtheman@gmail.com", "password2");
+        Response response = userController.authenticateUser("hannahstewart@example.com", "password");
 
-        Assert.assertNotNull(authenticated);
+        Assert.assertEquals(response.getStatus(), 200);
+
+        response = userController.authenticateUser("samtheman@gmail.com", "password2");
+
+        System.out.println("Status: " + response.getStatus());
+        Assert.assertEquals(response.getStatus(), 200);
 
         userController.update(testUser.getId(), testUser);
 

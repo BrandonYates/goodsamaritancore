@@ -14,15 +14,25 @@ package core;
  */
 
     import org.springframework.beans.factory.annotation.Autowired;
-//    import org.springframework.security.crypto.password.PasswordEncoder;
+    import org.springframework.http.MediaType;
     import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.web.bind.annotation.RequestMethod;
     import org.springframework.web.bind.annotation.RequestMapping;
     import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.bind.annotation.RestController;
-    import core.StringManipulation;
+    import com.google.gson.Gson;
 
-    import javax.annotation.Resource;
+    import javax.ws.rs.Consumes;
+    import javax.ws.rs.DELETE;
+    import javax.ws.rs.GET;
+    import javax.ws.rs.POST;
+    import javax.ws.rs.PUT;
+    import javax.ws.rs.Path;
+    import javax.ws.rs.PathParam;
+    import javax.ws.rs.Produces;
+    import javax.ws.rs.QueryParam;
+    import javax.ws.rs.core.Response;
+
     import java.util.Collection;
     import java.util.Iterator;
     import java.util.UUID;
@@ -45,28 +55,30 @@ public class UserController {
         return hello;
     }
 
-    @RequestMapping(value = "/createUser/params", method = RequestMethod.POST)
-    public void createUser(@RequestParam("firstName")String firstName,
-                           @RequestParam("lastName")String lastName,
+    @Path("/createUser/params")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public Response createUser(@RequestParam("firstName")String firstName,
+                               @RequestParam("lastName")String lastName,
                            @RequestParam("emailAddress")String emailAddress,
                            String password) {
-
-        String hashed = encoder.encode(password);
-        User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, hashed);
+        System.out.println("CREATE USER CALLED");
+        User newUser = new User(String.valueOf(UUID.randomUUID()), firstName, lastName, emailAddress, password);
         userRepository.save(newUser);
+
+        return Response.ok(newUser).build();
     }
 
-    @RequestMapping(value = "/createUser/obj", method = RequestMethod.POST)
-    public void createUser(User user) {
+    @Path("/createUser/")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    public User createUser(User user) {
 
-        String before = user.getHashedPassword();
-        String hashed = encoder.encode(before);
-
-        System.out.println("preHash: " + user.toString());
-        user.setHashedPassword(encoder.encode(hashed));
-
-        System.out.println("postHash: " + user.toString());
         userRepository.save(user);
+
+        return user;
     }
 
     @RequestMapping(value = "/findUserById", method = RequestMethod.GET)
@@ -104,26 +116,37 @@ public class UserController {
     }
 
     //this method is likely to evolve significantly as a more robust authentication method is employed from android
-    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public User authenticateUser(@RequestParam("emailAddress")String emailAddress,
+    @Path("/authenticate")
+    @POST
+    @Consumes("application/json")
+    @Produces("application/json")
+    @RequestMapping(method = RequestMethod.POST)
+    public Response authenticateUser(@RequestParam("emailAddress")String emailAddress,
                                     String password) {
 
         Collection<User> users = userRepository.findByEmailAddress(emailAddress);
+
+
+
+        System.out.println("result: " + encoder.matches(password, encoder.encode(password)));
 
         for(Iterator<User> iter = users.iterator(); iter.hasNext();) {
             User user = iter.next();
 
             System.out.println("****************");
             System.out.println(user.toString());
+            System.out.println("password: " + password);
             System.out.println("****************");
-            System.out.println("matches " + encoder.matches("password", user.getHashedPassword()));
+            System.out.println("matches " + encoder.matches(password, user.getHashedPassword()));
             System.out.println("****************");
 
             if(encoder.matches(password, user.getHashedPassword())) {
-                return user;
+                Gson gson = new Gson();
+                System.out.println(gson.toJson(user));
+                Response.ResponseBuilder response = Response.ok(user);
+                return response.build();
             }
-
         }
-        return null;
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
 }
