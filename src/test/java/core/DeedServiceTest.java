@@ -74,7 +74,7 @@ public class DeedServiceTest {
   @Test
   public void testSetDateLong() {
     d3.setDate(0);
-    Assert.assertTrue(d3.getDate(), d3.getDate().equals("Wed Dec 31 18:00:00 CST 1969"));
+    Assert.assertTrue(d3.getDate(), d3.getDate().equals("Thu Jan 01 00:00:00 UTC 1970"));
   }
 
 //  @Test
