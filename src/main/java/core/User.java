@@ -30,6 +30,7 @@ public class User {
     private String emailAddress;
     private String hashedPassword;
     private Collection<Deed> deeds;
+    private int points;
 
     public User () {}
 
@@ -73,6 +74,24 @@ public class User {
     public Collection<Deed> getDeeds() { return deeds; }
 
     public void setDeeds(Collection<Deed> deeds) { this.deeds = deeds;}
+
+    public int getPoints() { return points; }
+
+    //recalculates users point values and stores that information
+    //returns the point value to avoid an unnecessary call to getPoints
+    //if the value is not needed/desired simply ignore the return value
+    public int calculatePoints() {
+
+        int runningTotal = 0;
+        for(Deed deed: this.deeds) {
+
+            runningTotal += deed.getPointValue();
+        }
+        this.points = runningTotal;
+
+        return runningTotal;
+    }
+
 
     public String toString() {
         return "Id: " + this.id + "\nFirstName: " + this.firstName + "\nLastName: "

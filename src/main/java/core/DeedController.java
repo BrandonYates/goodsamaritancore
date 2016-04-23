@@ -36,11 +36,12 @@ public class DeedController {
                            @RequestParam("date")long date,
                            @RequestParam("uid")String uid,
                            @RequestParam("latitude")Double lat,
-                           @RequestParam("latitude")Double lon) {
+                           @RequestParam("longitude")Double lon,
+                           @RequestParam("pointvalue")int pointValue) {
 
     Location l = new Location(UUID.randomUUID().toString(), lat, lon);
     locRepository.save(l);
-    Deed newDeed = new Deed(String.valueOf(UUID.randomUUID()), desc, date, uid, l);
+    Deed newDeed = new Deed(String.valueOf(UUID.randomUUID()), desc, date, uid, l, pointValue);
     deedRepository.save(newDeed);
     return newDeed.getId();
   }

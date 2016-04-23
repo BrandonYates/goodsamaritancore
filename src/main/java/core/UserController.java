@@ -86,7 +86,16 @@ public class UserController {
     @RequestMapping(value = "/findUserById", method = RequestMethod.GET)
     public User findById(@RequestParam("id")String id) {
 
-        return userRepository.findById(id);
+        User user = userRepository.findById(id);
+
+        if(user == null) {
+            System.out.println("User Not Found");
+        } else
+        {
+            System.out.println("User Found");
+        }
+        return user;
+//        return userRepository.findById(id);
     }
 
     @RequestMapping(value = "/findUserByEmail", method = RequestMethod.GET)

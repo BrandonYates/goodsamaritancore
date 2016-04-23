@@ -13,6 +13,8 @@ package core;
  */
 
 import core.Location;
+import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.lang.StringBuilder;
 import java.text.DateFormat;
@@ -30,20 +32,25 @@ public class Deed {
   private String  requestingUserId;
   private Set<String> claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
   private Location location = new Location();
+
+  @Transient
   private DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
   private boolean active;
+  @Field("pValue")
+  private int pointValue;
 
   public Deed() {};
 
-  public Deed(String id, String desc, long t, String uid, Location l) {
+  public Deed(String id, String desc, long t, String uid, Location l, int points) {
     this.id = id;
     this.description = desc;
     this.date = new Date(t);
     this.requestingUserId = uid;
     this.location.copy(l);
+    this.pointValue = points;
   };
 
-  public Deed(String id, String desc, String d, String uid, Location l) {
+  public Deed(String id, String desc, String d, String uid, Location l, int points) {
     this.id = id;
     this.description = desc;
     try {
@@ -54,6 +61,8 @@ public class Deed {
     this.requestingUserId = uid;
     this.location.copy(l);
     this.claimedUserIds = Collections.synchronizedSet(new HashSet<String>());
+
+    this.pointValue = points;
   };
 
   public Deed(Deed d) {
@@ -68,6 +77,7 @@ public class Deed {
 
   public String getDate() { return this.date.toString(); };
   public void setDate(long t) { this.date.setTime(t); };
+
   public void setDate(String d) {
     try {
       this.date = df.parse(d);
@@ -90,6 +100,10 @@ public class Deed {
 
   public void setActive(boolean active) { this.active = active; }
 
+  public int getPointValue() { return pointValue; }
+
+  public void setPointValue(int pointValue) { this.pointValue = pointValue; }
+
   public String toString() {
     StringBuilder s = new StringBuilder();
     s.append(String.format("ID: %s\n", this.id));
@@ -98,6 +112,7 @@ public class Deed {
     s.append(String.format("Date: %s\n", this.date.toString()));
     s.append(String.format("Claimed User IDs: %s\n", this.claimedUserIds.toString()));
     s.append(String.format("Location: %s\n", this.location.toString()));
+    s.append(String.format("Point Value: %s\n", this.location.toString()));
     return s.toString();
   }
 
@@ -122,4 +137,5 @@ public class Deed {
       this.claimedUserIds = d.claimedUserIds;
       this.location = d.location;
   }
+
 }
