@@ -60,7 +60,7 @@ public class DeedController {
 
   @RequestMapping(value = "/findDeedByRequestingUserId", method = RequestMethod.GET)
   public Collection<Deed> findByRequestingUserId(@RequestParam("uid")String requestingUserId) {
-        Collection<Deed> deeds = deedRepository.findByRequestingUser(requestingUserId);
+        Collection<Deed> deeds = deedRepository.findByRequestingUserId(requestingUserId);
         if(deeds == null) {
             System.out.println("Deeds Not Found");
         } else
