@@ -54,14 +54,21 @@ public class DeedController {
 
   @RequestMapping(value = "/findDeedById", method = RequestMethod.GET)
   public Deed findById(@RequestParam("id")String id) {
-
+ 
         return deedRepository.findById(id);
   }
 
   @RequestMapping(value = "/findDeedByRequestingUserId", method = RequestMethod.GET)
   public Collection<Deed> findByRequestingUserId(@RequestParam("uid")String requestingUserId) {
-
-        return deedRepository.findByRequestingUserId(requestingUserId);
+        Collection<Deed> deeds = deedRepository.findByRequestingUser(requestingUserId);
+        if(deeds == null) {
+            System.out.println("Deeds Not Found");
+        } else
+        {
+            System.out.println("Deeds Found");
+        }
+        return deeds;
+        
   }
 
   @RequestMapping(value = "/updateDeed", method = RequestMethod.POST)
